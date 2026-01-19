@@ -1,0 +1,10 @@
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/JobifyApplication.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/config/BCryptPasswordEncoder.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/config/PasswordEncoder.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/controller/UserController.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/entity/JobSeeker.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/entity/Recruiter.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/entity/SignupEntity.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/models/Signup.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/repository/SignupRepository.java
+/Users/varunidesai/Desktop/jobify/src/main/java/com/learn/jobify/service/UserService.java

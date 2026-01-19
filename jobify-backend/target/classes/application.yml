@@ -1,0 +1,29 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /jobify
+
+spring:
+  application:
+    name: jobify
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Metastore
+    username: postgres
+    password: test
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none   # use update only in local dev
+    show-sql: false #Make true to see it to solve any issue
+    properties:
+      hibernate:
+        format_sql: true
+        #default_schema: "Users"
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
