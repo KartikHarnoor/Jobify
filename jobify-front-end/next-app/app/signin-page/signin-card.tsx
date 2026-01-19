@@ -103,7 +103,7 @@ export default function SigninCard() {
                 <div className="w-full flex flex-row items-center justify-center gap-2 mb-4">
                     <div className="font-poppins text-sm">Already have an account?</div>
                     <button className="font-poppins text-sm font-semibold hover:cursor-pointer hover:text-[#0f202a]"
-                        onClick= {() => router.push('/')}
+                        onClick= {() => router.push('/landing-page')}
                     >
                         Sign In
                     </button>
