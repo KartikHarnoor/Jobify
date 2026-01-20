@@ -12,9 +12,9 @@ jwt:
   expiration: 86400000   # 1 day in ms
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/Metastore
-    username: postgres
-    password: test
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
