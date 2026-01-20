@@ -7,15 +7,17 @@ spring:
   application:
     name: jobify
 
-jwt:
-  secret: mySuperSecretKeyForJobifyApplication1234567890
-  expiration: 86400000   # 1 day in ms
-
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USER}
     password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
+  jwt:
+    secret: mySuperSecretKeyForJobifyApplication1234567890
+    expiration: 86400000   # 1 day in ms
+
+
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
