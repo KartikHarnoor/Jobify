@@ -9,4 +9,8 @@ import java.util.Optional;
 @Repository
 public interface SignupRepository extends JpaRepository<SignupEntity, Long>{
     Optional<SignupEntity> findByUserNameAndPasswordHash(String userName, String passwordHash);
+
+    boolean existsByUserName(String userName);
+    boolean existsByEmail(String email);
+
 }

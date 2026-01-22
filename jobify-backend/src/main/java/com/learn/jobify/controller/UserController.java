@@ -1,10 +1,6 @@
 package com.learn.jobify.controller;
 
-import com.learn.jobify.entity.JobSeekerEntity;
-import com.learn.jobify.entity.RecruiterEntity;
-import com.learn.jobify.models.JobSeeker;
-import com.learn.jobify.models.Login;
-import com.learn.jobify.models.Recruiter;
+import com.learn.jobify.models.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.learn.jobify.service.UserService;
-import com.learn.jobify.models.Signup;
 
 @AllArgsConstructor
 @RestController
@@ -22,16 +17,22 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody Signup signup) {
-        userService.registerUser(signup);
-        return ResponseEntity.ok("User registered");
+    public ResponseEntity<Response> signup(@RequestBody Signup signup) {
+        Response response = userService.registerUser(signup);
+        if("fail".contains(response.getStatus())){
+            return ResponseEntity.badRequest().body(response);
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> signup(@RequestBody Login login) {
+    public ResponseEntity<Response> login(@RequestBody Login login) {
         try {
-            String loginResult=userService.loginUser(login);
-            return ResponseEntity.ok(loginResult);
+            Response response = userService.loginUser(login);
+            if("fail".contains(response.getStatus())){
+                return ResponseEntity.badRequest().body(response);
+            }
+            return ResponseEntity.ok(response);
         }
         catch (Exception e){
             throw e;
@@ -41,16 +42,21 @@ public class UserController {
 
 
     @PostMapping("/register/jobseeker")
-    public ResponseEntity<String> RegisterAsJobSeeker(@RequestBody JobSeeker jobSeeker){
-        userService.registerJobSeeker(jobSeeker);
-        return ResponseEntity.ok("Job Seeker Profile completed");
+    public ResponseEntity<Response> registerAsJobSeeker(@RequestBody JobSeeker jobSeeker){
+        Response response = userService.registerJobSeeker(jobSeeker);
+        if("fail".contains(response.getStatus())){
+            return ResponseEntity.badRequest().body(response);
+        }
+        return ResponseEntity.ok(response);
+
     }
 
     @PostMapping("/register/recruiter")
-    public ResponseEntity<String> RegisterAsEmployer(@RequestBody Recruiter recruiter){
-        userService.registerRecruiter(recruiter);
-        return ResponseEntity.ok("Recruiter Profile completed");
+    public ResponseEntity<Response> registerAsEmployer(@RequestBody Recruiter recruiter) {
+        Response response = userService.registerRecruiter(recruiter);
+        if ("fail".contains(response.getStatus())) {
+            return ResponseEntity.badRequest().body(response);
+        }
+        return ResponseEntity.ok(response);
     }
-
-
 }
