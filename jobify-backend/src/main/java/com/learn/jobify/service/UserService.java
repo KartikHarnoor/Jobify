@@ -1,12 +1,9 @@
 package com.learn.jobify.service;
 
 import com.learn.jobify.entity.RecruiterEntity;
-import com.learn.jobify.models.JobSeeker;
+import com.learn.jobify.models.*;
 import com.learn.jobify.entity.SignupEntity;
 import com.learn.jobify.entity.JobSeekerEntity;
-import com.learn.jobify.models.Login;
-import com.learn.jobify.models.Recruiter;
-import com.learn.jobify.models.Signup;
 import com.learn.jobify.repository.JobSeekerRepository;
 import com.learn.jobify.repository.RecruiterRepository;
 import com.learn.jobify.repository.SignupRepository;
@@ -23,8 +20,24 @@ public class UserService {
     private final SignupRepository signupRepository;
     private final JobSeekerRepository jobSeekerRepository;
     private final RecruiterRepository recruiterRepository;
+    public static final String SUCCESS = "success";
+    public static final String FAIL = "fail";
 
-    public void registerUser(Signup signup) {
+    public Response registerUser(Signup signup) {
+        Response response = new Response("","");
+        if((signupRepository.existsByUserName(signup.getUserName())))
+        {
+            response.setStatus(FAIL);
+            response.setMessage("Username already exists");
+            return response;
+
+        }
+        if((signupRepository.existsByEmail(signup.getEmail()))){
+            response.setStatus(FAIL);
+            response.setMessage("Email already exists");
+            return response;
+
+        }
         SignupEntity signupEntity = SignupEntity.builder()
                 .userName(signup.getUserName())
                 .passwordHash(signup.getPasswordHash())
@@ -49,6 +62,9 @@ public class UserService {
                     .createdAt(Instant.now())
                     .build();
             jobSeekerRepository.save(jobSeekerEntity);
+            response.setStatus(SUCCESS);
+            response.setMessage("User registered");
+            return response;
         }
         else if (signup.getType().equals("Employer")) {
             RecruiterEntity recruiterEntity = RecruiterEntity.builder()
@@ -63,25 +79,39 @@ public class UserService {
                     .createdAt(Instant.now())
                     .build();
             recruiterRepository.save(recruiterEntity);
+            response.setStatus(SUCCESS);
+            response.setMessage("User registered");
+            return response;
         }
+        response.setStatus(SUCCESS);
+        response.setMessage(SUCCESS);
+        return response;
 
     }
-    public String loginUser(Login login){
+    public Response loginUser(Login login){
         String user= login.username;
         String pass=login.password;
+        Response response = new Response("","");
         if((!user.isEmpty() && (!pass.isEmpty()))){
-        Optional<SignupEntity> signupEntity=signupRepository.findByUserNameAndPasswordHash(login.username, login.password);
-        if(signupEntity.isEmpty()) {
-            return "Invalid Credentials";
-        }
+            Optional<SignupEntity> signupEntity=signupRepository.findByUserNameAndPasswordHash(login.username, login.password);
+            if(signupEntity.isEmpty()) {
+                response.setStatus(FAIL);
+                response.setMessage("Invalid Credentials");
+                return response;
+            }
         }
         else{
-            return "Enter username and password";
+            response.setStatus(FAIL);
+            response.setMessage("Enter username and password");
+            return response;
         }
-        return "User verified";
+        response.setStatus(SUCCESS);
+        response.setMessage("User verified");
+        return response;
 
     }
-    public JobSeekerEntity registerJobSeeker(JobSeeker jobSeeker) {
+    public Response registerJobSeeker(JobSeeker jobSeeker) {
+        Response response = new Response("","");
 
         JobSeekerEntity jobSeekerEntity = jobSeekerRepository
                 .findByUserName(jobSeeker.getUserName())
@@ -108,10 +138,14 @@ public class UserService {
         jobSeekerEntity.setJobType(jobSeeker.getJobType());
         jobSeekerEntity.setResumeUrl(jobSeeker.getResumeUrl());
         jobSeekerEntity.setProfileUrls(jobSeeker.getProfileUrls());
-        return jobSeekerRepository.save(jobSeekerEntity);
+        jobSeekerRepository.save(jobSeekerEntity);
+        response.setStatus(SUCCESS);
+        response.setMessage("Job seeker registered");
+        return response;
     }
 
-    public RecruiterEntity registerRecruiter(Recruiter recruiter){
+    public Response registerRecruiter(Recruiter recruiter){
+        Response response = new Response("","");
         RecruiterEntity recruiterEntity = recruiterRepository.findByUserName(recruiter.getUserName())
                 .orElseGet(RecruiterEntity::new);
 
@@ -137,7 +171,9 @@ public class UserService {
         recruiterEntity.setGstNumber(recruiter.getGstNumber());
         recruiterEntity.setUpdatedAt(Instant.now());
 
-        return recruiterRepository.save(recruiterEntity);
+        response.setStatus(SUCCESS);
+        response.setMessage("Recruiter registered");
+        return response;
     }
 
 }
