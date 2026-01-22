@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import jobifylogo from "../../public/jobify-images/jobify-logo.png";
 import {
     ChevronDown,
     User,
@@ -13,8 +12,12 @@ import {
     Laptop,
     Rocket,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
+
+    const router = useRouter();
+
     return (
         <div className="w-full min-h-screen flex flex-col mb-2 p-2 sm:p-4 md:p-6 gap-8 md:gap-16">
 
@@ -25,8 +28,10 @@ export default function LandingPage() {
                 <div className="w-full flex flex-row items-center justify-between gap-4 md:gap-10">
                     <div className="flex flex-row items-center justify-center gap-2 sm:gap-4">
                         <Image
-                            src={jobifylogo}
+                            src="/jobify-images/jobify-logo.png"
                             alt="Jobify Logo"
+                            width={28}
+                            height={40}
                             className="w-7 h-10 sm:w-9 sm:h-12"
                         />
                         <div className="hidden md:flex flex-row items-center gap-1 font-poppins cursor-pointer">
@@ -53,11 +58,17 @@ export default function LandingPage() {
                     </div>
 
                     <div className="flex flex-row items-center gap-2 sm:gap-4">
-                        <button className="bg-[#16303d] text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm">
+                        <button 
+                            type ="submit"
+                            onClick={() => router.push('/signup-page')}
+                        className="bg-[#16303d] text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm">
                             Sign Up
                         </button>
 
-                        <button className="hidden sm:block bg-[#11feb6] text-black px-4 py-2 rounded-full text-sm">
+                        <button 
+                           type ="submit"
+                            onClick={() => router.push('/')}
+                        className="hidden sm:block bg-[#11feb6] text-black px-4 py-2 rounded-full text-sm">
                             Log In
                         </button>
 
