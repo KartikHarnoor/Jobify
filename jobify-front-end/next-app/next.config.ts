@@ -5,3 +5,11 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+async function rewrites() {
+  return [
+    {
+      source: "/jobify/:path*",
+      destination: "http://localhost:8081/jobify/:path*",
+    },
+  ];
+}

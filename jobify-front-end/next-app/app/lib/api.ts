@@ -1,5 +1,3 @@
-import { endianness } from "os";
-
 type HttpMethod = "GET" | "PUT" | "POST" | "DELETE" ;
 
 interface ApiConfig {
@@ -7,7 +5,7 @@ interface ApiConfig {
     body?: any;
 }
 
-const api_prefix = "/api" // used for proxy fixes
+const api_prefix = "http://localhost:8081/jobify" // used for proxy fixes
 
 async function apiFetch<T>(
     endpoint: string,
