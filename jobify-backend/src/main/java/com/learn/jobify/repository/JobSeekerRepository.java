@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-
 @Repository
 public interface JobSeekerRepository extends JpaRepository<JobSeekerEntity, Long>{
     Optional<JobSeekerEntity> findByUserName(String userName);

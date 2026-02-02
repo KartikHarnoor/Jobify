@@ -176,4 +176,11 @@ public class UserService {
         return response;
     }
 
+    public Optional<RecruiterEntity> getInfoRecruiter(String userName){
+        return recruiterRepository.findByUserName(userName);
+    }
+
+    public Optional<JobSeekerEntity> getInfoJobseeker(String userName){
+        return jobSeekerRepository.findByUserName(userName);
+    }
 }

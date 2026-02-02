@@ -6,11 +6,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Map;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Data
 public class JobSeeker {
 
     public String userName;

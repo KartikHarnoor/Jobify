@@ -1,10 +1,13 @@
 package com.learn.jobify.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
+
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Response {
     private String status;   // success / fail
     private String message;
