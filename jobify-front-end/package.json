@@ -1,0 +1,8 @@
+{
+  "name": "jobify-front-end",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "next-app"
+  ]
+}
