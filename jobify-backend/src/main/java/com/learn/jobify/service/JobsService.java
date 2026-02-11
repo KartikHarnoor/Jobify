@@ -48,4 +48,10 @@ public class JobsService {
     public List<JobsEntity> allJobs(String userName){
         return jobsRepository.findByRecruiter_UserName(userName);
     }
+
+    public Long activeJobCount(String userName){
+        return jobsRepository.countByRecruiter_UserNameAndStatus(userName, "open");
+    }
+
+
 }

@@ -42,5 +42,11 @@ public class JobsController{
         return ResponseEntity.ok(jobs);
     }
 
+    @GetMapping("/activejobscount/{userName}")
+    public ResponseEntity<Long> activeJobCount(@PathVariable String userName) {
+        Long count = jobsService.activeJobCount(userName);
+        return ResponseEntity.ok(count);
+    }
+
 
 }

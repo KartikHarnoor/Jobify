@@ -10,5 +10,6 @@ import java.util.Optional;
 
 public interface RecruiterRepository extends JpaRepository<RecruiterEntity, Long>{
     Optional<RecruiterEntity> findByUserName(String userName);
+
     //Optional<RecruiterEntity> findById(Long id);
 }
