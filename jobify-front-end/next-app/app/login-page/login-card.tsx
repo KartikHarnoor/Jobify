@@ -1,23 +1,29 @@
-"use-client";
+"use client";
 
 import { useState } from "react";
 import Image from "next/image";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation"
 import { post } from "../lib/api";
+import Input from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function LoginCard() {
-    const [showPassword, setShowPassword] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-        const router = useRouter();
+    const router = useRouter();
 
     const handleLogin = async () => {
         setLoading(true);
         setError("");
+
+        if (!username || !password) {
+            setError("Please fill the Credentials")
+            return;
+        }
 
         try {
             const res = await post("/login", {
@@ -28,83 +34,62 @@ export default function LoginCard() {
             router.push('/landing-page')
 
         } catch (err: any) {
-          console.log(err.message);
+            setError("Invalid Credentials");
+            console.log(err.message);
         } finally {
             setLoading(false);
         }
     };
 
-    // async function loadData(){
-    //     const res = await 
-
-
     return (
+        <div className="flex flex-col gap-8 items-center justify-center bg-background w-full max-w-md p-8 rounded-md shadow-2xl">
+            <div className="bg-green-100 p-4 rounded-full mb-2">
+                <Lock className="h-8 w-8" />
+            </div>
+            <div className="flex flex-col gap-2 items-center justify-center">
+                <div className="font-bold text-4xl">
+                    Welcome Back
+                </div>
+                <div className="font-normal text-sm text-gray-500">
+                    Sign in to manage your hiring flow
+                </div>
+            </div>
+            <div className="flex flex-col gap-6 items-center justify-center w-full">
+                <Input
+                    label="Email/Username"
+                    type="text"
+                    placeholder="Email/Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    labelClassName="font-semibold text-sm"
+                    required={true}
+                />
 
-        <div className="flex flex-col items-start justify-start bg-white rounded-2xl shadow-lg">
-            <Image src="/jobify-images/jobify-logo.png" alt="Jobify Logo" width={40} height={60} className="w-10 h-15 ml-2 mt-2" />
-            <div className="flex flex-col items-center pl-8 pr-8 pb-8">
-                {/* Header */}
-                <div className="flex flex-row items-center mb-8">
-                    <div className="font-poppins font-semibold text-5xl">
-                        Jobify
-                    </div>
+                <Input
+                    label="Password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    labelClassName="font-semibold text-sm"
+                    required={true}
+                />
+            </div>
+            {error && (
+                <div className="w-full text-red-500 text-sm text-center">
+                    {error}
                 </div>
-                {/* Login form */}
-                <div className="w-full flex flex-row items-center gap-4 border border-[#efefef] bg-[#efefef] rounded-full px-4 py-2 mb-6">
-                    <Mail className="h-8 w-8" />
-                    <input
-                        type="text"
-                        placeholder="Email/Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="w-full bg-transparent border-none outline-none mx-2 my-2"
-                    />
-                </div>
-                <div className="w-full flex flex-row items-center gap-4 border border-[#efefef] bg-[#efefef] rounded-full px-4 py-2 mb-6">
-                    <Lock className="h-8 w-8" />
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full bg-transparent border-none outline-none mx-2 my-2"
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(prev => !prev)}
-                    >
-                        {
-                            showPassword ? <Eye className="h-6 w-6 cursor-pointer text-gray-400" /> : <EyeOff className="h-6 w-6 cursor-pointer text-gray-400" />
-                        }
-                    </button>
-                </div>
-                {error && (
-                    <div className="text-red-500 text-sm mb-4 font-poppins">
-                        {error}
-                    </div>
-                )}
-                <button
-                    type="submit"
-                    onClick={handleLogin}
-                    className="w-full font-poppins font-semibold bg-[#16303d] text-white rounded-full py-4 mb-6 hover:cursor-pointer hover:bg-[#0f202a]"
+            )}
+            <Button variant="default" className="w-full h-10 hover:cursor-pointer" onClick={handleLogin} disabled={loading}>
+                {loading ? "Signing in..." : "Sign in"}
+            </Button>
+            <div className="flex flex-row gap-2">
+                <div className="font-poppins text-sm">New to Jobify?</div>
+                <button className="font-poppins text-sm font-semibold hover:cursor-pointer hover:text-[#0f202a]"
+                    onClick={() => router.push('/signup-page')}
                 >
-                    {loading ? "Logging in..." : "Log In"}
+                    Create an account
                 </button>
-
-                <div className="w-full flex flex-row gap-2 items-center justify-center mb-6">
-                    <div className="w-full h-[1px] bg-gray-400"></div>
-                    <div className="text-gray-400 font-light font-poppins">or</div>
-                    <div className="w-full h-[1px] bg-gray-400"></div>
-                </div>
-
-                <div className="w-full flex flex-row items-center justify-center gap-2 mb-6">
-                    <div className="font-poppins text-sm">New to Jobify?</div>
-                    <button className="font-poppins text-sm font-semibold hover:cursor-pointer hover:text-[#0f202a]"
-                        onClick={() => router.push('/signup-page')}
-                    >
-                        Create an account
-                    </button>
-                </div>
             </div>
         </div>
     )
