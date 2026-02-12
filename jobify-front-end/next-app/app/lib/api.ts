@@ -5,7 +5,7 @@ interface ApiConfig {
     body?: any;
 }
 
-const api_prefix = "http://localhost:8081/jobify" // used for proxy fixes
+const api_prefix = "http://localhost:8081/jobify" // Prefixed from the next.config.ts file
 
 async function apiFetch<T>(
     endpoint: string,
