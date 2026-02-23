@@ -8,6 +8,8 @@ import com.learn.jobify.repository.JobSeekerRepository;
 import com.learn.jobify.repository.RecruiterRepository;
 import com.learn.jobify.repository.SignupRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,6 +22,8 @@ public class UserService {
     private final SignupRepository signupRepository;
     private final JobSeekerRepository jobSeekerRepository;
     private final RecruiterRepository recruiterRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
     public static final String SUCCESS = "success";
     public static final String FAIL = "fail";
 
@@ -38,9 +42,11 @@ public class UserService {
             return response;
 
         }
+        String hashedPassword = passwordEncoder.encode(signup.getPasswordHash());
+
         SignupEntity signupEntity = SignupEntity.builder()
                 .userName(signup.getUserName())
-                .passwordHash(signup.getPasswordHash())
+                .passwordHash(hashedPassword)
                 .fullName(signup.getFullName())
                 .email(signup.getEmail())
                 .phone(signup.getPhone())
@@ -88,27 +94,40 @@ public class UserService {
         return response;
 
     }
-    public Response loginUser(Login login){
-        String user= login.username;
-        String pass=login.password;
-        Response response = new Response("","");
-        if((!user.isEmpty() && (!pass.isEmpty()))){
-            Optional<SignupEntity> signupEntity=signupRepository.findByUserNameAndPasswordHash(login.username, login.password);
-            if(signupEntity.isEmpty()) {
-                response.setStatus(FAIL);
-                response.setMessage("Invalid Credentials");
-                return response;
-            }
-        }
-        else{
+
+    public Response loginUser(Login login) {
+        Response response = new Response("", "");
+
+        // 1. Validate empty fields
+        if (login.username.isEmpty() || login.password.isEmpty()) {
             response.setStatus(FAIL);
             response.setMessage("Enter username and password");
             return response;
         }
+
+        // 2. Fetch user by username only
+        Optional<SignupEntity> signupEntity = signupRepository.findByUserName(login.username);
+
+        // 3. If user not found
+        if (signupEntity.isEmpty()) {
+            response.setStatus(FAIL);
+            response.setMessage("Invalid Credentials");
+            return response;
+        }
+
+        // 4. Get the stored hash from DB and compare with raw input password
+        String storedHash = signupEntity.get().getPasswordHash();
+        boolean passwordMatches = passwordEncoder.matches(login.password, storedHash);
+
+        if (!passwordMatches) {
+            response.setStatus(FAIL);
+            response.setMessage("Invalid Credentials");
+            return response;
+        }
+
         response.setStatus(SUCCESS);
         response.setMessage("User verified");
         return response;
-
     }
     public Response registerJobSeeker(JobSeeker jobSeeker) {
         Response response = new Response("","");
